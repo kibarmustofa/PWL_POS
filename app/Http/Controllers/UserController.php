@@ -26,7 +26,23 @@ class UserController extends Controller
         //UserModel::create($data);
         
         // coba akses model UserModel
-        $jumlahPengguna = UserModel::where('level_id', 2)->count();
-        return view('user', ['jumlahPengguna' => $jumlahPengguna]);
+        $user = UserModel::create([
+            'username' => 'manager11',
+            'nama' => 'Manager11',
+            'password' => Hash::make('12345'),
+            'level_id' => 2,
+        ]);
+        
+        $user->username = 'manager12';
+        
+        $user->save();
+        
+        $user->wasChanged(); // true
+        $user->wasChanged('username'); // true
+        
+        $user->wasChanged(['username', 'level_id']); // true
+        $user->wasChanged('nama'); // false
+        
+        dd($user->wasChanged(['nama', 'username'])); // true
     }
 }
