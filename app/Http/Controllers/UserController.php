@@ -7,7 +7,8 @@ use App\Models\UserModel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTable;
+
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -44,13 +45,14 @@ class UserController extends Controller
         ];
         
         $activeMenu = 'user'; // set menu yang sedang aktif
-        
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        $level = LevelModel::all(); // ambil data level untuk filter level
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page,'level' => $level, 'activeMenu' => $activeMenu]);
 
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
+         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
     }
     public function list(Request $req)
     {
+        
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
         ->with('level');
 
