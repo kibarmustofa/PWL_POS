@@ -39,7 +39,7 @@ route::get('/level', [LevelController::class, 'index']);
 route::get('/kategori', [KategoriController::class, 'index']);
 route::get('/supplier', [KategoriController::class, 'index']);
 
-Route::get("/user", [UserController::class, "index"]);
+// Route::get("/user", [UserController::class, "index"]);
 // route::get('/',[WelcomeController::class,'index']);
 
 Route::group(['prefix' => 'user'], function () {
