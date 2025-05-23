@@ -2,8 +2,13 @@
 namespace App\Http\Controllers; 
  
 use Illuminate\Http\Request; 
-use Illuminate\Support\Facades\Auth; 
- 
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserModel;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
+use PHPUnit\TextUI\XmlConfiguration\SuccessfulSchemaDetectionResult;
+
 class AuthController extends Controller 
 { 
     public function login() 
@@ -17,7 +22,8 @@ class AuthController extends Controller
     { 
         if($request->ajax() || $request->wantsJson()){ 
             $credentials = $request->only('username', 'password'); 
-             if (Auth::attempt($credentials)) {                 return response()->json([ 
+             if (Auth::attempt($credentials)) {                 
+                return response()->json([ 
                     'status' => true, 
                     'message' => 'Login Berhasil', 
                     'redirect' => url('/') 
@@ -38,6 +44,40 @@ class AuthController extends Controller
         $request->session()->invalidate(); 
         $request->session()->regenerateToken();             
         return redirect('login'); 
-    } 
-} 
- 
+    }
+    public function register()
+    {
+        return view('auth.register');
+    }
+
+    public function postregister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|min:3|unique:m_user,username',
+            'nama' => 'required|string|min:3|max:100',
+            'password' => 'required|string|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal!',
+                'msgField' => $validator->errors()
+            ]);
+        }
+
+        $user = new UserModel();
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->password = Hash::make($request->password);
+        $user->level_id = 3; // Level default (staff)
+
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Registrasi berhasil! Silakan login.',
+            'redirect' => url('login')
+        ]);
+    }
+}

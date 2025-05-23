@@ -131,6 +131,32 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+         <!-- Avatar Dropdown Menu -->
+         <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" id="avatarDropdown">
+              {{-- Trigger dropdown --}}
+              <img src="{{ auth()->user()->foto_profil ? asset('storage/profile/' . auth()->user()->foto_profil) : asset('storage/profile/image.png') }}" 
+              class="img-circle elevation-2" alt="User  Image" width="30" height="30">
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              {{-- User Info --}}
+              <div class="dropdown-item text-center">
+                  <div class="image mb-2">
+                    <img src="{{ auth()->user()->foto_profil ? asset('storage/profile/' . auth()->user()->foto_profil) : asset('storage/profile/image.png') }}" 
+                    class="img-circle elevation-2" alt="User  Image" width="30" height="30">
+                  </div>
+                  <p class="mt-2 mb-0 font-weight-bold">{{ auth()->user()->nama }}</p>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              {{-- Ganti Foto Link --}}
+              <a href="#" class="dropdown-item text-center" data-toggle="modal" data-target="#changeAvatarModal">
+                  <i class="fas fa-camera mr-2"></i> Ganti Foto Profil
+              </a>
+          </div>
+        </li>
     </ul>
   </nav>
   <!-- /.navbar -->
